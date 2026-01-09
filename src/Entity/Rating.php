@@ -7,6 +7,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RatingRepository::class)]
+#[ORM\Table(name: 'rating', uniqueConstraints: [
+    new ORM\UniqueConstraint(name: 'uniq_recipe_ip', columns: ['recipe_id', 'ip_address'])
+])]
 class Rating
 {
     #[ORM\Id]
@@ -15,14 +18,18 @@ class Rating
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $score = null;
+    private int $score;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
+    #[ORM\Column(length: 45)]
+    private string $ipAddress;
+
     #[ORM\ManyToOne(inversedBy: 'ratings')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recipe $recipe = null;
+
 
     public function getId(): ?int
     {
@@ -62,6 +69,17 @@ class Rating
     {
         $this->recipe = $recipe;
 
+        return $this;
+    }
+
+    public function getIpAddress(): string
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress(string $ipAddress): self
+    {
+        $this->ipAddress = $ipAddress;
         return $this;
     }
 }

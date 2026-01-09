@@ -21,33 +21,65 @@ class Recipe
     #[ORM\Column]
     private ?int $diners = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isDeleted = false;
+
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?RecipeType $type = null;
 
+    #[ORM\Column]
+    private \DateTimeImmutable $createdAt;
+
+
     /**
      * @var Collection<int, Ingredient>
      */
-    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recipe')]
+    #[ORM\OneToMany(
+        targetEntity: Ingredient::class,
+        mappedBy: 'recipe',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $ingredients;
+
 
     /**
      * @var Collection<int, Step>
      */
-    #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'recipe')]
+    #[ORM\OneToMany(
+        targetEntity: Step::class,
+        mappedBy: 'recipe',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['stepOrder' => 'ASC'])]
     private Collection $steps;
+
 
     /**
      * @var Collection<int, RecipeNutrient>
      */
-    #[ORM\OneToMany(targetEntity: RecipeNutrient::class, mappedBy: 'recipe')]
+    #[ORM\OneToMany(
+        targetEntity: RecipeNutrient::class,
+        mappedBy: 'recipe',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $nutritionalValues;
+
 
     /**
      * @var Collection<int, Rating>
      */
-    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'recipe')]
+    #[ORM\OneToMany(
+        targetEntity: Rating::class,
+        mappedBy: 'recipe',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $ratings;
+
 
     public function __construct()
     {
@@ -55,6 +87,7 @@ class Recipe
         $this->steps = new ArrayCollection();
         $this->nutritionalValues = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -216,5 +249,21 @@ class Recipe
         }
 
         return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 }
