@@ -31,9 +31,7 @@ class MockDataCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // --------------------
-        // Recipe Types (catálogo)
-        // --------------------
+        // Recipe Types
         $recipeTypes = [
             ['POSTRE', 'Postre', 'Recetas dulces para el final de la comida'],
             ['ENSALADA', 'Ensalada', 'Recetas frías y ligeras'],
@@ -46,7 +44,7 @@ class MockDataCommand extends Command
         $createdRecipeTypes = 0;
 
         foreach ($recipeTypes as [$code, $name, $description]) {
-            // Evitar duplicados (idempotente)
+            // Evitar duplicados
             $existing = $this->recipeTypeRepository->findOneBy(['code' => $code]);
             if ($existing) {
                 continue;
@@ -61,9 +59,7 @@ class MockDataCommand extends Command
             $createdRecipeTypes++;
         }
 
-        // --------------------
-        // Nutrient Types (catálogo)
-        // --------------------
+        // Nutrient Types
         $nutrientTypes = [
             ['KCAL', 'Calorías', 'kcal'],
             ['PROT', 'Proteínas', 'g'],
@@ -76,7 +72,7 @@ class MockDataCommand extends Command
         $createdNutrientTypes = 0;
 
         foreach ($nutrientTypes as [$code, $name, $unit]) {
-            // Evitar duplicados (idempotente)
+            // Evitar duplicados
             $existing = $this->nutrientTypeRepository->findOneBy(['code' => $code]);
             if ($existing) {
                 continue;

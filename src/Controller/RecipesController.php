@@ -56,9 +56,7 @@ class RecipesController extends AbstractController
         return $this->json($data);
     }
 
-    /**
-     * POST /recipes
-     */
+    // POST /recipes
     #[Route('', methods: ['POST'])]
     public function create(
         Request $request,
@@ -163,9 +161,7 @@ class RecipesController extends AbstractController
         ], 201);
     }
 
-    /**
-     * DELETE /recipes/{id} (borrado lógico)
-     */
+    // DELETE /recipes/{id} (borrado lógico)
     #[Route('/{id}', methods: ['DELETE'])]
     public function delete(
         int $id,
@@ -184,9 +180,7 @@ class RecipesController extends AbstractController
         return $this->json(null, 204);
     }
 
-    /**
-     * POST /recipes/{id}/ratings
-     */
+    // POST /recipes/{id}/ratings
     #[Route('/{id}/ratings', methods: ['POST'])]
     public function rate(
         int $id,
